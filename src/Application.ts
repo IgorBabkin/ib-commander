@@ -1,8 +1,7 @@
 import { HookContext, HooksRunner, IContainer, inject, select } from 'ts-ioc-container';
-import { IErrorHandler, IErrorHandlerKey } from './error/IErrorHandler';
-import { BASIC_OPTION_SCHEMA } from './controller/options';
-import { IInputService, IInputServiceKey } from './services/IInputService';
-import { Controller } from './Controller';
+import { IErrorHandler, IErrorHandlerKey } from './error/IErrorHandler.js';
+import { BASIC_OPTION_SCHEMA } from './controller/options.js';
+import { IInputService, IInputServiceKey } from './services/input/IInputService.js';
 
 export class Application {
   static bootstrap(container: IContainer) {
@@ -19,7 +18,7 @@ export class Application {
     const beforeEachHooksRunner = new HooksRunner(`before-action`);
     const afterEachHooksRunner = new HooksRunner(`after-action`);
     const onErrorHooksRunner = new HooksRunner(`error`);
-    let controller: Controller;
+    let controller: object;
 
     try {
       const options = this.inputService.readOptionsOrFail((cmd) => cmd, BASIC_OPTION_SCHEMA);

@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { z } from 'zod';
 import { bindTo, inject, register, singleton } from 'ts-ioc-container';
-import { IInputService, IInputServiceKey } from './IInputService';
+import { IInputService, IInputServiceKey } from './IInputService.js';
 
 @register(bindTo(IInputServiceKey), singleton())
 export class ShellInputService implements IInputService {

@@ -2,16 +2,45 @@
   "name": "ib-commander",
   "version": "1.0.0",
   "description": "A TypeScript framework for building structured CLI applications",
+  "keywords": [
+    "cli",
+    "commander",
+    "typescript",
+    "decorators",
+    "ioc",
+    "dependency-injection"
+  ],
+  "author": "Igor Babkin",
+  "license": "MIT",
+  "homepage": "https://github.com/IgorBabkin/ib-commander#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IgorBabkin/ib-commander.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IgorBabkin/ib-commander/issues"
+  },
+  "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=20"
+  },
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
   "scripts": {
-    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc",
+    "build": "tsc -p tsconfig.prod.json",
     "type-check": "tsc --noEmit",
     "lint": "eslint src/",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
@@ -21,9 +50,7 @@
   },
   "dependencies": {
     "commander": "^14.0.3",
-    "reflect-metadata": "^0.2.2",
     "remeda": "^2.16.11",
-    "ts-ioc-container": "47.0.2",
     "type-fest": "^5.5.0",
     "zod": "^4.3.6"
   },
@@ -45,5 +72,9 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.54.0",
     "vitest": "^4.1.2"
+  },
+  "peerDependencies": {
+    "reflect-metadata": "^0.2.2",
+    "ts-ioc-container": "47.0.2"
   }
 }
