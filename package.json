@@ -1,0 +1,49 @@
+{
+  "name": "ib-commander",
+  "version": "1.0.0",
+  "description": "A TypeScript framework for building structured CLI applications",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src/",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "test": "vitest run",
+    "test:e2e": "vitest run e2e/",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "reflect-metadata": "^0.2.2",
+    "remeda": "^2.16.11",
+    "ts-ioc-container": "47.0.2",
+    "type-fest": "^5.5.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
+    "@eslint/js": "^9.39.2",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.6",
+    "@semantic-release/npm": "^13.1.5",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "moq.ts": "^10.0.8",
+    "prettier": "^3.8.1",
+    "semantic-release": "^24.2.9",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.54.0",
+    "vitest": "^4.1.2"
+  }
+}
