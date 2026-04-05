@@ -1,8 +1,6 @@
 import { bindTo, hook, inject, register } from 'ts-ioc-container';
-import { readInput } from '../src/services/input/IInputService';
-import { execute } from '../src/controller/hook';
+import { execute, ILogger, ILoggerKey, readInput } from '../src';
 import { z } from 'zod';
-import { ILogger, ILoggerKey } from '../src/services/logger/ILogger';
 import { Command } from 'commander';
 
 const GENERATE_CHANGELOG_SCHEMA = z.object({
@@ -30,7 +28,7 @@ export class ChangelogController {
   }
 
   @hook('generate', execute())
-  generate(@inject(readInput(generateChangelogOptions, GENERATE_CHANGELOG_SCHEMA)) _options: GenerateChangelogPayload): void {
+  generate(@inject(readInput(GENERATE_CHANGELOG_SCHEMA, generateChangelogOptions)) _options: GenerateChangelogPayload): void {
     this.logger.info(JSON.stringify(_options));
   }
 }
