@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/IgorBabkin/ib-commander/compare/v1.1.1...v1.2.0) (2026-04-05)
+
+
+### Bug Fixes
+
+* update readInput call to new argument order in e2e test ([4c413f8](https://github.com/IgorBabkin/ib-commander/commit/4c413f898ad4af515ac52a1d5a649855c32b7e4e))
+
+
+### Features
+
+* make mapCommand optional in readInput with identity default ([a0c4197](https://github.com/IgorBabkin/ib-commander/commit/a0c4197cecabda48c880e11dd6fa452abb2f40de))
+
 ## [1.1.1](https://github.com/IgorBabkin/ib-commander/compare/v1.1.0...v1.1.1) (2026-04-05)
 
 
