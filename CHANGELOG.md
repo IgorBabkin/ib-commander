@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/IgorBabkin/ib-commander/compare/v1.1.0...v1.1.1) (2026-04-05)
+
+
+### Bug Fixes
+
+* restore NPM_TOKEN for semantic-release npm publish ([17e3d74](https://github.com/IgorBabkin/ib-commander/commit/17e3d74d896180ce4814acd7ceff0658934b7deb))
+
 # [1.1.0](https://github.com/IgorBabkin/ib-commander/compare/v1.0.0...v1.1.0) (2026-04-05)
 
 
