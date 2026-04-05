@@ -1,11 +1,8 @@
-import 'reflect-metadata';
 import { beforeEach, describe, it } from 'vitest';
 import { Container, IContainer, Provider, Registration } from 'ts-ioc-container';
-import { Application, SetupModule } from '../src';
+import { Application, ILogger, ILoggerKey, SetupModule } from '../src';
 import { ChangelogController } from './ChangelogController';
-import { ILoggerKey } from '../src/services/ILogger';
 import { It, Mock } from 'moq.ts';
-import { ILogger } from '../src/services/ILogger';
 
 function createContainer() {
   return new Container().useModule(new SetupModule());

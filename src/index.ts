@@ -1,4 +1,7 @@
-export { Application } from './Application';
-export { SetupModule } from './SetupModule';
-export { before, after } from './controller/decorators';
-export { execute } from './controller/hook';
+export { Application } from './Application.js';
+export { SetupModule } from './SetupModule.js';
+export { before, after } from './controller/decorators.js';
+export { execute } from './controller/hook.js';
+export { ILogger, ILoggerKey } from './services/logger/ILogger.js';
+export { IInputService, IInputServiceKey, readInput } from './services/input/IInputService.js';
+export { IErrorHandler, IErrorHandlerKey } from './error/IErrorHandler.js';

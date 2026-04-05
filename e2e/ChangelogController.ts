@@ -1,8 +1,8 @@
 import { bindTo, hook, inject, register } from 'ts-ioc-container';
-import { readInput } from '../src/services/IInputService';
+import { readInput } from '../src/services/input/IInputService';
 import { execute } from '../src/controller/hook';
 import { z } from 'zod';
-import { ILogger, ILoggerKey } from '../src/services/ILogger';
+import { ILogger, ILoggerKey } from '../src/services/logger/ILogger';
 import { Command } from 'commander';
 
 const GENERATE_CHANGELOG_SCHEMA = z.object({

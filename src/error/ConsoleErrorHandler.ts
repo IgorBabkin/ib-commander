@@ -1,5 +1,5 @@
 import { bindTo, register, singleton } from 'ts-ioc-container';
-import { IErrorHandler, IErrorHandlerKey } from './IErrorHandler';
+import { IErrorHandler, IErrorHandlerKey } from './IErrorHandler.js';
 
 @register(bindTo(IErrorHandlerKey), singleton())
 export class ConsoleErrorHandler implements IErrorHandler {
