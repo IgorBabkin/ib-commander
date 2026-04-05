@@ -47,12 +47,6 @@
     "test:e2e": "vitest run e2e/",
     "prepare": "husky"
   },
-  "dependencies": {
-    "commander": "^14.0.3",
-    "remeda": "^2.16.11",
-    "type-fest": "^5.5.0",
-    "zod": "^4.3.6"
-  },
   "devDependencies": {
     "@commitlint/cli": "^19.0.0",
     "@commitlint/config-conventional": "^19.0.0",
@@ -74,6 +68,10 @@
   },
   "peerDependencies": {
     "reflect-metadata": "^0.2.2",
-    "ts-ioc-container": "47.0.2"
+    "ts-ioc-container": "47.0.2",
+    "commander": "^14.0.3",
+    "remeda": "^2.16.11",
+    "type-fest": "^5.5.0",
+    "zod": "^4.3.6"
   }
 }
