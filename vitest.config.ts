@@ -5,5 +5,6 @@ export default defineConfig({
     globals: true,
     restoreMocks: true,
     setupFiles: ['./src/setup.ts'],
+    include: ['**/*.{test,spec,e2e}.ts'],
   },
 });
