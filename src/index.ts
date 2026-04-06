@@ -1,6 +1,6 @@
 export { Application } from './Application.js';
 export { SetupModule } from './SetupModule.js';
-export { before, after } from './controller/decorators.js';
+export { before, after, error } from './controller/decorators.js';
 export { execute } from './controller/hook.js';
 export { ILogger, ILoggerKey } from './services/logger/ILogger.js';
 export { IInputService, IInputServiceKey, readInput } from './services/input/IInputService.js';
