@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/IgorBabkin/ib-commander/compare/v1.4.0...v1.5.0) (2026-04-06)
+
+
+### Features
+
+* add README, e2e tests, QA/SE skills, and fix default action dispatch ([da79ac1](https://github.com/IgorBabkin/ib-commander/commit/da79ac18c567aaa084df19acbbf40cec2ef5e581))
+
 # [1.4.0](https://github.com/IgorBabkin/ib-commander/compare/v1.3.0...v1.4.0) (2026-04-06)
 
 
