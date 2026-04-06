@@ -18,9 +18,9 @@ describe('ShellInputService', () => {
       expect(result).toMatchObject({ controller: 'changelog', action: 'generate' });
     });
 
-    it('uses empty string for action when not provided', () => {
+    it('defaults action to "default" when not provided', () => {
       const result = makeService(['ib', 'changelog']).readOptionsOrFail((cmd) => cmd, BASIC_SCHEMA);
-      expect(result).toMatchObject({ controller: 'changelog', action: '' });
+      expect(result).toMatchObject({ controller: 'changelog', action: 'default' });
     });
 
     it('parses named options defined by mapCommand', () => {

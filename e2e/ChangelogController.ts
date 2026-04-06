@@ -1,5 +1,5 @@
 import { bindTo, hook, inject, register } from 'ts-ioc-container';
-import { execute, ILogger, ILoggerKey, readInput } from '../src';
+import { execute, ILogger, ILoggerKey, onAfter, onBefore, onDefault, readInput } from '../src';
 import { z } from 'zod';
 import { Command } from 'commander';
 
@@ -22,13 +22,23 @@ export type GenerateChangelogPayload = z.infer<typeof GENERATE_CHANGELOG_SCHEMA>
 export class ChangelogController {
   constructor(@inject(ILoggerKey) private readonly logger: ILogger) {}
 
-  @hook('before')
-  log() {
+  @onBefore(execute())
+  logBefore() {
     this.logger.info('before');
   }
 
   @hook('generate', execute())
   generate(@inject(readInput(GENERATE_CHANGELOG_SCHEMA, generateChangelogOptions)) _options: GenerateChangelogPayload): void {
     this.logger.info(JSON.stringify(_options));
+  }
+
+  @onDefault(execute())
+  logDefault() {
+    this.logger.info('default');
+  }
+
+  @onAfter(execute())
+  logAfter() {
+    this.logger.info('after');
   }
 }

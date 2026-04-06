@@ -15,7 +15,7 @@ export class ShellInputService implements IInputService {
   readOptionsOrFail<T extends z.ZodTypeAny>(mapCommand: (cmd: Command) => Command, schema: T): z.infer<T> {
     const cmd = mapCommand(new Command()).allowUnknownOption(true).allowExcessArguments(true).exitOverride();
     cmd.parse(this.args, { from: 'user' });
-    const [, controller = '', action = ''] = this.operands;
+    const [, controller = '', action = undefined] = this.operands;
     return schema.parse({ controller, action, ...cmd.opts() });
   }
 }
