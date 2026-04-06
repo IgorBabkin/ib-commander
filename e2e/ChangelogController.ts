@@ -22,9 +22,9 @@ export type GenerateChangelogPayload = z.infer<typeof GENERATE_CHANGELOG_SCHEMA>
 export class ChangelogController {
   constructor(@inject(ILoggerKey) private readonly logger: ILogger) {}
 
-  @hook('before-action')
+  @hook('before')
   log() {
-    this.logger.info('before-action');
+    this.logger.info('before');
   }
 
   @hook('generate', execute())

@@ -15,8 +15,8 @@ export class Application {
   ) {}
 
   run(): void {
-    const beforeEachHooksRunner = new HooksRunner(`before-action`);
-    const afterEachHooksRunner = new HooksRunner(`after-action`);
+    const beforeEachHooksRunner = new HooksRunner(`before`);
+    const afterEachHooksRunner = new HooksRunner(`after`);
     const onErrorHooksRunner = new HooksRunner(`error`);
     let controller: object;
 
