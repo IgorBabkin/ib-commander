@@ -44,12 +44,19 @@ describe('CLI dispatch', () => {
     });
   });
 
-  describe('User story: developer invokes the default action', () => {
-    it('routes "changelog" with no action to logDefault', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog']));
+  describe('User story: developer maps both default and named action to the same method', () => {
+    it('routes "changelog" with no action to generate (default)', () => {
+      scope.register('args', Provider.fromValue(['ib', 'changelog', '--greeting', 'hello']));
       Application.bootstrap(scope).run();
 
-      loggerMock.verify((l) => l.info('default'));
+      loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))));
+    });
+
+    it('routes "changelog generate" to the same generate method', () => {
+      scope.register('args', Provider.fromValue(['ib', 'changelog', 'generate', '--greeting', 'hello']));
+      Application.bootstrap(scope).run();
+
+      loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))));
     });
   });
 

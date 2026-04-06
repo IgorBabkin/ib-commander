@@ -27,14 +27,10 @@ export class ChangelogController {
     this.logger.info('before');
   }
 
+  @onDefault(execute())
   @hook('generate', execute())
   generate(@inject(readInput(GENERATE_CHANGELOG_SCHEMA, generateChangelogOptions)) _options: GenerateChangelogPayload): void {
     this.logger.info(JSON.stringify(_options));
-  }
-
-  @onDefault(execute())
-  logDefault() {
-    this.logger.info('default');
   }
 
   @onAfter(execute())

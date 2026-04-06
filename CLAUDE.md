@@ -12,6 +12,8 @@ No test runner or linter is configured yet.
 
 ## Development Approach
 
+Follow spec-driven development: `SPEC.md` is the source of truth for all features, stories, and acceptance cases. Before implementing anything, locate the relevant story in `SPEC.md` and treat its cases as the definition of done.
+
 Use TDD (Test-Driven Development): write a failing test first, then implement the minimum code to make it pass, then refactor.
 
 Use [moq.ts](https://github.com/dvabuzyarov/moq.ts) for mocking in tests.
