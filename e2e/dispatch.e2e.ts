@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from 'vitest';
 import { Container, IContainer, Provider, Registration } from 'ts-ioc-container';
 import { Application, IErrorHandler, IErrorHandlerKey, ILogger, ILoggerKey, SetupModule } from '../src';
 import { ChangelogController } from './ChangelogController';
-import { It, Mock } from 'moq.ts';
+import { It, Mock, Times } from 'moq.ts';
 
 function createContainer() {
   return new Container().useModule(new SetupModule());
@@ -49,14 +49,14 @@ describe('CLI dispatch', () => {
       scope.register('args', Provider.fromValue(['ib', 'changelog', '--greeting', 'hello']));
       Application.bootstrap(scope).run();
 
-      loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))));
+      loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))), Times.Once());
     });
 
     it('routes "changelog generate" to the same generate method', () => {
       scope.register('args', Provider.fromValue(['ib', 'changelog', 'generate', '--greeting', 'hello']));
       Application.bootstrap(scope).run();
 
-      loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))));
+      loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))), Times.Once());
     });
   });
 
