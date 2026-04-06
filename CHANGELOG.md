@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/IgorBabkin/ib-commander/compare/v1.2.0...v1.3.0) (2026-04-06)
+
+
+### Features
+
+* export error hook decorator ([7dc0963](https://github.com/IgorBabkin/ib-commander/commit/7dc09638f060634395bf9b69fe0de5a977cb1137))
+
 # [1.2.0](https://github.com/IgorBabkin/ib-commander/compare/v1.1.1...v1.2.0) (2026-04-05)
 
 
