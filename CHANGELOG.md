@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/IgorBabkin/ib-commander/compare/v1.3.0...v1.4.0) (2026-04-06)
+
+
+### Features
+
+* export onDefault hook decorator ([bf29803](https://github.com/IgorBabkin/ib-commander/commit/bf298033429eb564dacdc91f8117edc05e688cd3))
+
 # [1.3.0](https://github.com/IgorBabkin/ib-commander/compare/v1.2.0...v1.3.0) (2026-04-06)
 
 
