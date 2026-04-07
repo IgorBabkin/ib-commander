@@ -51,9 +51,6 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
-      - name: Ensure npm 11.5.1+ for OIDC
-        run: npm install -g npm@latest
-
       - run: npm ci
 
       - run: npm run build
