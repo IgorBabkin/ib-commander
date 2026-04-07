@@ -9,7 +9,7 @@ export const execute = (): HookFn => (c) => {
     const command = resolveCmd(c.scope);
     const rawArgs = c.resolveArgs() as string[];
     const flagsStart = rawArgs.findIndex((a) => a.startsWith('-'));
-    command.parse(flagsStart >= 0 ? ['node', 'script', ...rawArgs.slice(flagsStart)] : ['node', 'script']);
+    command.parse(flagsStart >= 0 ? rawArgs.slice(flagsStart) : [], { from: 'user' });
     const opts = schema ? schema(c.scope).parse(command.opts()) : command.opts();
     c.invokeMethod({ args: [opts] });
   } else {
