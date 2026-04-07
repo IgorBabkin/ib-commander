@@ -1,7 +1,6 @@
-import { HookContext, HooksRunner, IContainer, inject, select } from 'ts-ioc-container';
+import { createHookContextFactory, HooksRunner, IContainer, inject, select } from 'ts-ioc-container';
 import { IErrorHandler, IErrorHandlerKey } from './error/IErrorHandler.js';
-import { BASIC_OPTION_SCHEMA } from './controller/options.js';
-import { IInputService, IInputServiceKey } from './services/input/IInputService.js';
+import { BASIC_ARGS_SCHEMA, MAIN_COMMAND } from './controller/options.js';
 import { createOnAfterHookRunner, createOnBeforeHookRunner, createOnErrorHookRunner } from './controller/decorators.js';
 
 export class Application {
@@ -15,34 +14,36 @@ export class Application {
 
   constructor(
     @inject(select.scope.current) private scope: IContainer,
-    @inject(IInputServiceKey) private inputService: IInputService,
     @inject(IErrorHandlerKey) private errorHandler: IErrorHandler,
   ) {}
 
-  run(): void {
-    let controller: object;
+  run(...args: string[]): void {
+    MAIN_COMMAND.action((controller: string, action: string | undefined) => {
+      let controllerObj: object | null = null;
+      try {
+        const options = BASIC_ARGS_SCHEMA.parse({ controller, action });
+        controllerObj = this.scope.resolve(options.controller) as object;
 
-    try {
-      const options = this.inputService.readOptionsOrFail((cmd) => cmd, BASIC_OPTION_SCHEMA);
-      controller = this.scope.resolve(options.controller) as object;
+        const createContext = createHookContextFactory({ args });
+        this.onBeforeHooksRunner.execute(controllerObj, { scope: this.scope, createContext });
 
-      this.onBeforeHooksRunner.execute(controller, { scope: this.scope });
-
-      const hooksRunner = new HooksRunner(options.action);
-      hooksRunner.execute(controller, { scope: this.scope });
-
-      this.onAfterHooksRunner.execute(controller, { scope: this.scope });
-    } catch (e) {
-      if (controller!)
-        this.onErrorHooksRunner.execute(controller, {
+        const hooksRunner = new HooksRunner(options.action);
+        hooksRunner.execute(controllerObj, {
           scope: this.scope,
-          createContext: (Target, scope, methodName) => {
-            return new HookContext(Target, scope, methodName).setInitialArgs(e);
-          },
+          createContext,
         });
-      this.errorHandler.handleError(e);
-    } finally {
-      this.scope.dispose();
-    }
+
+        this.onAfterHooksRunner.execute(controllerObj, { scope: this.scope, createContext });
+      } catch (e) {
+        if (controllerObj)
+          this.onErrorHooksRunner.execute(controllerObj, {
+            scope: this.scope,
+            createContext: createHookContextFactory({ args: [e] }),
+          });
+        this.errorHandler.handleError(e);
+      } finally {
+        this.scope.dispose();
+      }
+    }).parse(args, { from: 'electron' });
   }
 }

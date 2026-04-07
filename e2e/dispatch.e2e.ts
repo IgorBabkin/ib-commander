@@ -28,8 +28,7 @@ describe('CLI dispatch', () => {
 
   describe('User story: developer invokes a controller action from the CLI', () => {
     it('routes "changelog generate" to ChangelogController.generate and logs options', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog', 'generate', '--greeting', 'hello']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'changelog', 'generate', '--greeting', 'hello');
 
       loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))));
     });
@@ -37,8 +36,7 @@ describe('CLI dispatch', () => {
 
   describe('User story: developer invokes an unregistered controller', () => {
     it('calls the error handler when the controller is not found', () => {
-      scope.register('args', Provider.fromValue(['ib', 'unknown', 'generate']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'unknown', 'generate');
 
       errorHandlerMock.verify((h) => h.handleError(It.IsAny()));
     });
@@ -46,15 +44,13 @@ describe('CLI dispatch', () => {
 
   describe('User story: developer maps both default and named action to the same method', () => {
     it('routes "changelog" with no action to generate (default)', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog', '--greeting', 'hello']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'changelog', '--greeting', 'hello');
 
       loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))), Times.Once());
     });
 
     it('routes "changelog generate" to the same generate method', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog', 'generate', '--greeting', 'hello']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'changelog', 'generate', '--greeting', 'hello');
 
       loggerMock.verify((l) => l.info(It.Is<string>((v) => v.includes('hello'))), Times.Once());
     });
@@ -62,15 +58,13 @@ describe('CLI dispatch', () => {
 
   describe('User story: lifecycle hooks surround every action', () => {
     it('fires the before hook when dispatching "generate"', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog', 'generate', '--greeting', 'hi']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'changelog', 'generate', '--greeting', 'hi');
 
       loggerMock.verify((l) => l.info('before'));
     });
 
     it('fires the after hook when dispatching "generate"', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog', 'generate', '--greeting', 'hi']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'changelog', 'generate', '--greeting', 'hi');
 
       loggerMock.verify((l) => l.info('after'));
     });
@@ -78,8 +72,7 @@ describe('CLI dispatch', () => {
 
   describe('User story: developer omits a required option', () => {
     it('calls the error handler when --greeting is missing from "changelog generate"', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog', 'generate']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'changelog', 'generate');
 
       errorHandlerMock.verify((h) => h.handleError(It.IsAny()));
     });
@@ -87,8 +80,7 @@ describe('CLI dispatch', () => {
 
   describe('User story: developer invokes an unknown action on a known controller', () => {
     it('still fires lifecycle hooks even when the action name is unregistered', () => {
-      scope.register('args', Provider.fromValue(['ib', 'changelog', 'unknown']));
-      Application.bootstrap(scope).run();
+      Application.bootstrap(scope).run('ib', 'changelog', 'unknown');
 
       loggerMock.verify((l) => l.info('before'));
       loggerMock.verify((l) => l.info('after'));

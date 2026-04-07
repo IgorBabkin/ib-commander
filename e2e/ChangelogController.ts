@@ -1,17 +1,11 @@
 import { bindTo, hook, inject, register } from 'ts-ioc-container';
-import { execute, ILogger, ILoggerKey, onAfter, onBefore, onDefault, readInput } from '../src';
+import { execute, ILogger, ILoggerKey, onAfter, onBefore, onDefault } from '../src';
 import { z } from 'zod';
 import { Command } from 'commander';
 
 const GENERATE_CHANGELOG_SCHEMA = z.object({
   greeting: z.string(),
 });
-
-const generateChangelogOptions = (cmd: Command): Command => {
-  return cmd.option('--greeting <value>', 'Greeting...');
-};
-
-export type GenerateChangelogPayload = z.infer<typeof GENERATE_CHANGELOG_SCHEMA>;
 
 /**
  * How to use
@@ -29,8 +23,11 @@ export class ChangelogController {
 
   @onDefault(execute())
   @hook('generate', execute())
-  generate(@inject(readInput(GENERATE_CHANGELOG_SCHEMA, generateChangelogOptions)) _options: GenerateChangelogPayload): void {
-    this.logger.info(JSON.stringify(_options));
+  generate(...args: string[]): void {
+    const program = new Command().requiredOption('--greeting <value>', 'Greeting');
+    program.parse(args);
+    const result = GENERATE_CHANGELOG_SCHEMA.parse(program.opts());
+    this.logger.info(JSON.stringify(result));
   }
 
   @onAfter(execute())
