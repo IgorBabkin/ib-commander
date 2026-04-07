@@ -1,6 +1,6 @@
 {
   "name": "ib-commander",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "A TypeScript framework for building structured CLI applications",
   "keywords": [
     "cli",

@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/IgorBabkin/ib-commander/compare/v1.5.2...v1.5.3) (2026-04-07)
+
+
+### Bug Fixes
+
+* resolve action-dispatch bugs caused by module-level Command singleton and flag misparse ([30bf8ee](https://github.com/IgorBabkin/ib-commander/commit/30bf8ee91064a88d2d1617377e0b988590967c17))
+
 ## [1.5.2](https://github.com/IgorBabkin/ib-commander/compare/v1.5.1...v1.5.2) (2026-04-06)
 
 ## [1.5.1](https://github.com/IgorBabkin/ib-commander/compare/v1.5.0...v1.5.1) (2026-04-06)
