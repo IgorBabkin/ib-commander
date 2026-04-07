@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/IgorBabkin/ib-commander/compare/v1.5.3...v1.6.0) (2026-04-07)
+
+
+### Features
+
+* add [@command](https://github.com/command) and [@schema](https://github.com/schema) decorators for declarative argument parsing ([5669978](https://github.com/IgorBabkin/ib-commander/commit/5669978157177e4155bc5b1ed4bdc08bbdabcf3e))
+
 ## [1.5.3](https://github.com/IgorBabkin/ib-commander/compare/v1.5.2...v1.5.3) (2026-04-07)
 
 
