@@ -1,7 +1,8 @@
 import { createHookContextFactory, HooksRunner, IContainer, inject, select } from 'ts-ioc-container';
 import { IErrorHandler, IErrorHandlerKey } from './error/IErrorHandler.js';
-import { BASIC_ARGS_SCHEMA, MAIN_COMMAND } from './controller/options.js';
+import { BASIC_ARGS_SCHEMA, isOption } from './controller/options.js';
 import { createOnAfterHookRunner, createOnBeforeHookRunner, createOnErrorHookRunner } from './controller/decorators.js';
+import { Argument, Command } from 'commander';
 
 export class Application {
   static bootstrap(container: IContainer) {
@@ -18,32 +19,39 @@ export class Application {
   ) {}
 
   run(...args: string[]): void {
-    MAIN_COMMAND.action((controller: string, action: string | undefined) => {
-      let controllerObj: object | null = null;
-      try {
-        const options = BASIC_ARGS_SCHEMA.parse({ controller, action });
-        controllerObj = this.scope.resolve(options.controller) as object;
+    const program = new Command()
+      .allowUnknownOption()
+      .allowExcessArguments()
+      .addArgument(new Argument('<controller>', 'First argument must be name of controller').argRequired())
+      .addArgument(new Argument('<action>', 'Second argument is hook name').argOptional());
 
-        const createContext = createHookContextFactory({ args });
-        this.onBeforeHooksRunner.execute(controllerObj, { scope: this.scope, createContext });
+    program.parse(args, { from: 'electron' });
 
-        const hooksRunner = new HooksRunner(options.action);
-        hooksRunner.execute(controllerObj, {
+    let controllerObj: object | null = null;
+    try {
+      const [controller, action = 'default'] = program.args;
+      const options = BASIC_ARGS_SCHEMA.parse({ controller, action: isOption(action) ? 'default' : action });
+      controllerObj = this.scope.resolve(options.controller) as object;
+
+      const createContext = createHookContextFactory({ args });
+      this.onBeforeHooksRunner.execute(controllerObj, { scope: this.scope, createContext });
+
+      const hooksRunner = new HooksRunner(options.action);
+      hooksRunner.execute(controllerObj, {
+        scope: this.scope,
+        createContext,
+      });
+
+      this.onAfterHooksRunner.execute(controllerObj, { scope: this.scope, createContext });
+    } catch (e) {
+      if (controllerObj)
+        this.onErrorHooksRunner.execute(controllerObj, {
           scope: this.scope,
-          createContext,
+          createContext: createHookContextFactory({ args: [e] }),
         });
-
-        this.onAfterHooksRunner.execute(controllerObj, { scope: this.scope, createContext });
-      } catch (e) {
-        if (controllerObj)
-          this.onErrorHooksRunner.execute(controllerObj, {
-            scope: this.scope,
-            createContext: createHookContextFactory({ args: [e] }),
-          });
-        this.errorHandler.handleError(e);
-      } finally {
-        this.scope.dispose();
-      }
-    }).parse(args, { from: 'electron' });
+      this.errorHandler.handleError(e);
+    } finally {
+      this.scope.dispose();
+    }
   }
 }

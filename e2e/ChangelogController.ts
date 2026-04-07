@@ -25,7 +25,8 @@ export class ChangelogController {
   @hook('generate', execute())
   generate(...args: string[]): void {
     const program = new Command().requiredOption('--greeting <value>', 'Greeting');
-    program.parse(args);
+    const flagsStart = args.findIndex((a) => a.startsWith('-'));
+    program.parse(flagsStart >= 0 ? ['node', 'script', ...args.slice(flagsStart)] : ['node', 'script']);
     const result = GENERATE_CHANGELOG_SCHEMA.parse(program.opts());
     this.logger.info(JSON.stringify(result));
   }
