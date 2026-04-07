@@ -91,6 +91,17 @@ Decorators and conventions that developers use to declare controllers.
 - Case: injection fails with `ValidationError` if the input does not match the schema
 - Case: multiple parameters can each inject from different schemas
 
+**Story 2.2.6 — `@command` and `@schema` declarative argument parsing**
+
+`@command(fn)` and `@schema(fn)` are method-level decorators that let `execute()` own the full parse-validate-invoke cycle. This is an alternative to `@inject(readInput(...))` — place the parsing declaration on the method instead of the parameter.
+
+- Case: a method with `@command(fn)` has its raw CLI args parsed by the `Command` instance returned by `fn`; the method receives the parsed `command.opts()` object as its first argument
+- Case: when `@schema(fn)` is also present, `execute()` validates `command.opts()` through the Zod schema before passing the result to the method
+- Case: `@schema` validation failure throws before the method is invoked; the error propagates to `IErrorHandler`
+- Case: without `@command`, `execute()` invokes the method with no injected args (existing behaviour for pure lifecycle hooks)
+- Case: the `@command` factory receives the IoC scope (`IContainer`), allowing container-resolved values to influence Command construction
+- Case: `@command` and `@schema` compose cleanly with `@onDefault` and `@hook` on the same method
+
 ---
 
 ## Feature 3 — IoC Container Integration

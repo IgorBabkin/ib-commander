@@ -1,5 +1,5 @@
 import { bindTo, hook, inject, register } from 'ts-ioc-container';
-import { execute, ILogger, ILoggerKey, onAfter, onBefore, onDefault } from '../src';
+import { command, execute, ILogger, ILoggerKey, onAfter, onBefore, onDefault, schema } from '../src';
 import { z } from 'zod';
 import { Command } from 'commander';
 
@@ -21,14 +21,12 @@ export class ChangelogController {
     this.logger.info('before');
   }
 
+  @command(() => new Command().requiredOption('--greeting <value>', 'Greeting'))
+  @schema(() => GENERATE_CHANGELOG_SCHEMA)
   @onDefault(execute())
   @hook('generate', execute())
-  generate(...args: string[]): void {
-    const program = new Command().requiredOption('--greeting <value>', 'Greeting');
-    const flagsStart = args.findIndex((a) => a.startsWith('-'));
-    program.parse(flagsStart >= 0 ? ['node', 'script', ...args.slice(flagsStart)] : ['node', 'script']);
-    const result = GENERATE_CHANGELOG_SCHEMA.parse(program.opts());
-    this.logger.info(JSON.stringify(result));
+  generate(options: z.infer<typeof GENERATE_CHANGELOG_SCHEMA>): void {
+    this.logger.info(options.greeting);
   }
 
   @onAfter(execute())

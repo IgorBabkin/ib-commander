@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { bindTo, Container, hook, IContainer, inject, Provider, register, Registration } from 'ts-ioc-container';
-import { Application, execute, IErrorHandler, IErrorHandlerKey, onAfter, onBefore, onDefault, onError, SetupModule } from './index.js';
+import { Application, command, execute, IErrorHandler, IErrorHandlerKey, onAfter, onBefore, onDefault, onError, schema, SetupModule } from './index.js';
 import { It, Mock } from 'moq.ts';
+import { z } from 'zod';
+import { Command } from 'commander';
 
 const CALLS_KEY = 'calls';
 
@@ -56,6 +58,32 @@ class ThrowingController {
   }
 }
 
+const GREETING_SCHEMA = z.object({ greeting: z.string() });
+
+@register(bindTo('cmdctrl'))
+class CommandSchemaController {
+  constructor(@inject(CALLS_KEY) private readonly calls: string[]) {}
+
+  @command(() => new Command().requiredOption('--greeting <value>', 'Greeting'))
+  @schema(() => GREETING_SCHEMA)
+  @onDefault(execute())
+  @hook('greet', execute())
+  greet(opts: z.infer<typeof GREETING_SCHEMA>) {
+    this.calls.push(opts.greeting);
+  }
+}
+
+@register(bindTo('cmdonly'))
+class CommandOnlyController {
+  constructor(@inject(CALLS_KEY) private readonly calls: string[]) {}
+
+  @command(() => new Command().option('--value <v>', 'A value'))
+  @onDefault(execute())
+  action(opts: { value?: string }) {
+    this.calls.push(opts.value ?? 'none');
+  }
+}
+
 describe('Application', () => {
   let errorHandlerMock: Mock<IErrorHandler>;
   let calls: string[];
@@ -72,6 +100,8 @@ describe('Application', () => {
     Registration.fromClass(TestController).applyTo(scope);
     Registration.fromClass(DualRoleController).applyTo(scope);
     Registration.fromClass(ThrowingController).applyTo(scope);
+    Registration.fromClass(CommandSchemaController).applyTo(scope);
+    Registration.fromClass(CommandOnlyController).applyTo(scope);
   });
 
   function makeApp() {
@@ -104,6 +134,33 @@ describe('Application', () => {
     it('calls the same shared method when the named action is provided', () => {
       makeApp().run('ib', 'dual', 'generate');
       expect(calls).toContain('shared');
+    });
+  });
+
+  describe('@command + @schema declarative argument parsing', () => {
+    it('passes Zod-validated opts to the method for the default action', () => {
+      makeApp().run('ib', 'cmdctrl', '--greeting', 'hello');
+      expect(calls).toContain('hello');
+    });
+
+    it('passes Zod-validated opts to the method for a named action', () => {
+      makeApp().run('ib', 'cmdctrl', 'greet', '--greeting', 'world');
+      expect(calls).toContain('world');
+    });
+
+    it('routes Commander parse failure to errorHandler', () => {
+      makeApp().run('ib', 'cmdctrl');
+      errorHandlerMock.verify((h) => h.handleError(It.IsAny()));
+    });
+
+    it('passes raw command.opts() to the method when @schema is absent', () => {
+      makeApp().run('ib', 'cmdonly', '--value', 'raw');
+      expect(calls).toContain('raw');
+    });
+
+    it('passes default opts when no flags are provided and @schema is absent', () => {
+      makeApp().run('ib', 'cmdonly');
+      expect(calls).toContain('none');
     });
   });
 
